@@ -1,0 +1,71 @@
+<html>
+
+<head>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/d3/5.7.0/d3.min.js"></script>
+
+    <style>
+        body {
+            background: beige;
+        }
+    </style>
+
+
+
+</head>
+
+<body>
+    <script>
+        var data = [10, 5, 12, 15, 46, 23, 78, 32, 98, 125, 58];
+
+        var colors = d3.schemeSpectral[data.length];
+        var width = window.innerWidth - 270;
+        var height = window.innerHeight - 50;
+        var rads = d3.scaleLinear()
+            .domain([0, d3.max(data)])
+            .range([0, width])
+
+        var svg = d3.select('body')
+            .append('svg')
+            .attr('width', width + 250)
+            .attr('height', height)
+
+        var g = svg.selectAll('g')
+            .data(data)
+            .enter()
+            .append('g')
+            .attr('transform', function(d) {
+                return ('translate(0,0)');
+            })
+
+        g.append('circle')
+            .attr('cx', function(d, i) {
+                return (rads(d));
+            })
+            .attr('cy', function(d, i) {
+                return height / 2;
+            })
+            .attr('r', function(d) {
+                return rads(d) / 20;
+            })
+            .attr('fill', function(d, i) {
+                return colors[i];
+            })
+            .style("stroke", "black")
+
+        g.append('text')
+            .attr("x", function(d, i) {
+                return rads(d) - 7;
+            })
+            .attr("y", function(d) {
+                return rads(d) / 20 + (height / 2) + 20;
+            })
+            .attr("stroke", "#ff6d6d")
+            .attr("font-size", "12px")
+            .attr("font-family", "sans-serif")
+            .text(function(d) {
+                return d;
+            });
+    </script>
+</body>
+
+</html>

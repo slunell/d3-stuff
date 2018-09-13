@@ -5,7 +5,7 @@
     <script type="text/javascript" src="https://d3js.org/d3.v4.min.js"></script>
     <style>
         body {
-            background: beige;
+            background: #acbee2;
         }
 
         svg {
@@ -30,9 +30,9 @@
         // set the dimensions and margins of the graph
         var margin = {
                 top: 20,
-                right: 100,
+                right: 40,
                 bottom: 30,
-                left: 50
+                left: 60
             },
             width = 960 - margin.left - margin.right,
             height = 500 - margin.top - margin.bottom;
@@ -98,18 +98,29 @@
 
         svg.append("text")
             .attr("transform",
-                "translate(" + (width / 2) + " ," +
+                "translate(" + ((width / 2) - 5) + " ," +
                 (10) + ")")
             .style("text-anchor", "middle")
             .style('font', '20px times')
             .text("Look at this Graph");
 
+        svg.append('rect')
+            .attr('width', '109')
+            .attr('height', '52')
+            .attr('x', (width - 122) / 2)
+            .attr('y', '19')
+            .style('fill', 'white')
+            .style('stroke', '#5d778c')
+
+
         svg.append("image")
             .attr("xlink:href", "graph.jpg")
             .attr('width', '100')
             .attr('height', '100')
-            .attr('x', (width - 105) / 2)
-            .attr('y', '-10')
+            .attr('x', (width - 113) / 2)
+            .attr('y', '-5')
+
+
 
         svg.append("text")
             .attr("transform",
@@ -120,7 +131,7 @@
 
         svg.append("text")
             .attr("transform", "rotate(-90)")
-            .attr("y", 0 - margin.left)
+            .attr("y", 10 - margin.left)
             .attr("x", 0 - (height / 2))
             .attr("dy", "1em")
             .style("text-anchor", "middle")

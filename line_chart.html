@@ -62,7 +62,7 @@
 
 
         // Get the data
-        d3.csv("data.csv", function(error, data) {
+        d3.csv("Resources/data.csv", function(error, data) {
             if (error) throw error;
             // format the data
             data.forEach(function(d) {
@@ -114,7 +114,7 @@
 
 
         svg.append("image")
-            .attr("xlink:href", "graph.jpg")
+            .attr("xlink:href", "Resources/graph.jpg")
             .attr('width', '100')
             .attr('height', '100')
             .attr('x', (width - 113) / 2)

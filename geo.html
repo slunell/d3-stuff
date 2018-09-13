@@ -38,8 +38,8 @@
     var title = d3.select("h1");
 
     queue()
-        .defer(d3.json, "Resources/world-110m.json")
-        .defer(d3.tsv, "Resources/world-country-names.tsv")
+        .defer(d3.json, "resources/world-110m.json")
+        .defer(d3.tsv, "resources/world-country-names.tsv")
         .await(ready);
 
     function ready(error, world, names) {

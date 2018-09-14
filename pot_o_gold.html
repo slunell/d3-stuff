@@ -1,4 +1,4 @@
-// transition a rainbow coming out of pot upon winning
+<!-- transition a rainbow coming out of pot after winning -->
 
 <!DOCTYPE html>
 <meta charset="utf-8">
@@ -32,35 +32,24 @@
         width = +svg.attr("width"),
         height = +svg.attr("height"),
         coin_radius = 10,
-        pot_radius = 50;
+        pot_radius = 50,
+        score = 0;
 
     var pot_cx = Math.floor(Math.random() * (width - pot_radius * 2) + pot_radius),
         pot_cy = Math.floor(Math.random() * (height - pot_radius * 2) + pot_radius);
 
-    var circles = d3.range(20).map(function() {
-
-        var retry = false;
+    var circles = d3.range(5).map(function() {
 
         var coin_cx = Math.floor(Math.random() * (width - coin_radius * 2) + coin_radius),
             coin_cy = Math.floor(Math.random() * (height - coin_radius * 2) + coin_radius);
 
-        var d = Math.sqrt(Math.pow(coin_cx - pot_cx, 2) + Math.pow(coin_cy - pot_cy, 2))
-
-
-        if (pot_radius > (d + coin_radius - 50)) {
-            retry = true;
-        }
+        var retry = reinitializePlacement(coin_cx, coin_cy);
 
         while (retry) {
-            coin_cx = Math.floor(Math.random() * (width - coin_radius * 2) + coin_radius)
+            coin_cx = Math.floor(Math.random() * (width - coin_radius * 2) + coin_radius);
             coin_cy = Math.floor(Math.random() * (height - coin_radius * 2) + coin_radius);
 
-            d = Math.sqrt(Math.pow(coin_cx - pot_cx, 2) + Math.pow(coin_cy - pot_cy, 2))
-
-
-            if (pot_radius <= (d + coin_radius - 50)) {
-                retry = false;
-            }
+            retry = reinitializePlacement(coin_cx, coin_cy);
         }
 
 
@@ -69,6 +58,44 @@
             y: coin_cy
         };
     });
+
+    var arc = d3.arc()
+        .innerRadius(170)
+        .outerRadius(240)
+        .startAngle(Math.PI * -.5);
+
+    var arc2 = d3.arc()
+        .innerRadius(180)
+        .outerRadius(190)
+        .startAngle(Math.PI * -.5);
+
+    var arc3 = d3.arc()
+        .innerRadius(190)
+        .outerRadius(200)
+        .startAngle(Math.PI * -.5);
+
+    var arc4 = d3.arc()
+        .innerRadius(200)
+        .outerRadius(210)
+        .startAngle(Math.PI * -.5);
+    var arc5 = d3.arc()
+        .innerRadius(210)
+        .outerRadius(220)
+        .startAngle(Math.PI * -.5);
+
+    var arc6 = d3.arc()
+        .innerRadius(220)
+        .outerRadius(230)
+        .startAngle(Math.PI * -.5);
+
+    var arc7 = d3.arc()
+        .innerRadius(230)
+        .outerRadius(240)
+        .startAngle(Math.PI * -.5);
+
+    var g = svg.append("g")
+        .attr("transform", "translate(" + (pot_cx + 200) + "," + pot_cy + ")")
+
 
 
 
@@ -97,7 +124,6 @@
         .attr('cx', pot_cx)
         .attr('cy', pot_cy)
         .attr('r', '50')
-        .attr('id', 'pot')
         .style("fill", "#4f5154")
         .style('stroke', 'black')
 
@@ -109,6 +135,15 @@
         .style('fill', '#4f5154')
         .style('stroke', 'black')
 
+    svg.append('ellipse')
+        .attr('cx', pot_cx)
+        .attr('cy', pot_cy - 35)
+        .attr('rx', '34')
+        .attr('ry', '3')
+        .style('fill', 'black')
+
+    createRainbow()
+
     function dragstarted(d) {
         d3.select(this).raise().classed("active", true);
     }
@@ -119,7 +154,128 @@
 
     function dragended(d) {
         d3.select(this).classed("active", false);
-        console.log(d.x, d.y);
+        if (isItIn(d.x, d.y)) {
+            d3.select(this).style('display', 'none')
+            score++;
+        }
+        //console.log(score)
+
+        if (score == 5) createRainbow();
+    }
+
+    function reinitializePlacement(coin_cx, coin_cy) {
+        var d = Math.sqrt(Math.pow(coin_cx - pot_cx, 2) + Math.pow(coin_cy - pot_cy, 2));
+        return (pot_radius > (d + coin_radius - 50)) ? true : false;
+    }
+
+    function isItIn(x, y) {
+        var d = Math.sqrt(Math.pow(x - pot_cx, 2) + Math.pow(y - pot_cy, 2));
+        return (pot_radius > (d + coin_radius)) ? true : false;
+    }
+
+    function createRainbow() {
+        g.append('path')
+            .datum({
+                endAngle: Math.PI / 2
+            })
+            .attr('d', arc)
+            .style('fill', 'white')
+            .transition()
+            .duration(750)
+            .style('fill', '#DB0AD7')
+
+        g.append('path')
+            .datum({
+                endAngle: Math.PI / 2
+            })
+            .attr('d', arc2)
+            .style('fill', 'white')
+            .transition()
+            .duration(750)
+            .style('fill', 'indigo')
+
+        g.append('path')
+            .datum({
+                endAngle: Math.PI / 2
+            })
+            .attr('d', arc3)
+            .style('fill', 'white')
+            .transition()
+            .duration(750)
+            .style('fill', 'blue')
+
+        g.append('path')
+            .datum({
+                endAngle: Math.PI / 2
+            })
+            .attr('d', arc4)
+            .style('fill', 'white')
+            .transition()
+            .duration(750)
+            .style('fill', 'green')
+
+        g.append('path')
+            .datum({
+                endAngle: Math.PI / 2
+            })
+            .attr('d', arc5)
+            .style('fill', 'white')
+            .transition()
+            .duration(750)
+            .style('fill', 'yellow')
+
+        g.append('path')
+            .datum({
+                endAngle: Math.PI / 2
+            })
+            .attr('d', arc6)
+            .style('fill', 'white')
+            .transition()
+            .duration(750)
+            .style('fill', 'orange')
+
+        g.append('path')
+            .datum({
+                endAngle: Math.PI / 2
+            })
+            .attr('d', arc7)
+            .style('fill', 'white')
+            .transition()
+            .duration(750)
+            .style('fill', 'red')
+
+        svg.append('circle')
+            .attr("cx", pot_cx)
+            .attr("cy", pot_cy - 40)
+            .attr("r", coin_radius)
+            .attr("class", "coin")
+            .style("fill", "gold")
+            .style("stroke", "black")
+
+        svg.append('circle')
+            .attr("cx", pot_cx - 4)
+            .attr("cy", pot_cy - 48)
+            .attr("r", coin_radius)
+            .attr("class", "coin")
+            .style("fill", "gold")
+            .style("stroke", "black")
+
+        svg.append('circle')
+            .attr("cx", pot_cx + 13)
+            .attr("cy", pot_cy - 40)
+            .attr("r", coin_radius)
+            .attr("class", "coin")
+            .style("fill", "gold")
+            .style("stroke", "black")
+
+        svg.append('circle')
+            .attr("cx", pot_cx - 17)
+            .attr("cy", pot_cy - 42)
+            .attr("r", coin_radius)
+            .attr("class", "coin")
+            .style("fill", "gold")
+            .style("stroke", "black")
+
     }
 
 </script>

@@ -1,3 +1,5 @@
+// transition a rainbow coming out of pot upon winning
+
 <!DOCTYPE html>
 <meta charset="utf-8">
 <style>
@@ -29,14 +31,46 @@
     var svg = d3.select("svg"),
         width = +svg.attr("width"),
         height = +svg.attr("height"),
-        radius = 10;
+        coin_radius = 10,
+        pot_radius = 50;
+
+    var pot_cx = Math.floor(Math.random() * (width - pot_radius * 2) + pot_radius),
+        pot_cy = Math.floor(Math.random() * (height - pot_radius * 2) + pot_radius);
 
     var circles = d3.range(20).map(function() {
+
+        var retry = false;
+
+        var coin_cx = Math.floor(Math.random() * (width - coin_radius * 2) + coin_radius),
+            coin_cy = Math.floor(Math.random() * (height - coin_radius * 2) + coin_radius);
+
+        var d = Math.sqrt(Math.pow(coin_cx - pot_cx, 2) + Math.pow(coin_cy - pot_cy, 2))
+
+
+        if (pot_radius > (d + coin_radius - 50)) {
+            retry = true;
+        }
+
+        while (retry) {
+            coin_cx = Math.floor(Math.random() * (width - coin_radius * 2) + coin_radius)
+            coin_cy = Math.floor(Math.random() * (height - coin_radius * 2) + coin_radius);
+
+            d = Math.sqrt(Math.pow(coin_cx - pot_cx, 2) + Math.pow(coin_cy - pot_cy, 2))
+
+
+            if (pot_radius <= (d + coin_radius - 50)) {
+                retry = false;
+            }
+        }
+
+
         return {
-            x: Math.round(Math.random() * (width - radius * 2) + radius),
-            y: Math.round(Math.random() * (height - radius * 2) + radius)
+            x: coin_cx,
+            y: coin_cy
         };
     });
+
+
 
     var color = d3.scaleOrdinal()
         .range(d3.schemeCategory20);
@@ -50,7 +84,7 @@
         .attr("cy", function(d) {
             return d.y;
         })
-        .attr("r", radius)
+        .attr("r", coin_radius)
         .attr("class", "coin")
         .style("fill", "gold")
         .style("stroke", "black")
@@ -60,10 +94,20 @@
             .on("end", dragended));
 
     svg.append('circle')
-        .attr('cx', '150')
-        .attr('cy', '150')
+        .attr('cx', pot_cx)
+        .attr('cy', pot_cy)
         .attr('r', '50')
+        .attr('id', 'pot')
         .style("fill", "#4f5154")
+        .style('stroke', 'black')
+
+    svg.append('ellipse')
+        .attr('cx', pot_cx)
+        .attr('cy', pot_cy - 40)
+        .attr('rx', '50')
+        .attr('ry', '10')
+        .style('fill', '#4f5154')
+        .style('stroke', 'black')
 
     function dragstarted(d) {
         d3.select(this).raise().classed("active", true);
